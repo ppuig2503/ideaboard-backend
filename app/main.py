@@ -37,8 +37,13 @@ async def startup_event():
     """
     print(f"Starting application in {settings.ENV} environment...")
     print(f"Database URL: {settings.DATABASE_URL.split('@')[-1]}")  # Log without credentials
-    init_db()
-    print("Database initialized successfully!")
+    try:
+        init_db()
+        print("Database initialized successfully!")
+    except Exception as e:
+        # Don't crash the whole app on DB initialization failure; log and continue.
+        # This allows the process to start so you can inspect logs / health check.
+        print("Warning: database initialization failed on startup:", str(e))
 
 
 @app.get("/health", response_model=HealthResponse, tags=["health"])

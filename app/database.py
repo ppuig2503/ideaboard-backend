@@ -4,11 +4,17 @@ from sqlalchemy.orm import sessionmaker
 from .config import settings
 
 # Create database engine
+connect_args = {}
+if settings.is_production:
+    # Ensure SSL is required in production (helps with managed DBs like Supabase)
+    connect_args = {"sslmode": "require"}
+
 engine = create_engine(
     settings.DATABASE_URL,
     pool_pre_ping=True,  # Verify connections before using them
     pool_size=5,  # Number of connections to keep in the pool
     max_overflow=10,  # Max number of connections that can be created beyond pool_size
+    connect_args=connect_args,
 )
 
 # Create session factory

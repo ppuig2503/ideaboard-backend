@@ -30,7 +30,7 @@ class Settings:
         else:
             # Add your production frontend URL here
             return [
-                "https://your-frontend-domain.com",
+                "https://ideaboard.localhost8000.eu",
             ]
     
     @property
